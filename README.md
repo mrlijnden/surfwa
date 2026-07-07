@@ -93,8 +93,9 @@ Static daily page (digest + chart, written to `site/index.html`):
 uv run surfwa web --days 3 --out site
 ```
 
-A scheduled GitHub Action (`.github/workflows/pages.yml`) runs this every
-morning and publishes the result to GitHub Pages.
+For hosting, the repo builds with nixpacks (see `nixpacks.toml`, e.g. on
+Dokploy): `deploy/start.sh` generates the page on boot, refreshes it every
+`REFRESH_HOURS` (default 6), and serves it on `PORT` (default 8080).
 
 Historical backtest:
 

@@ -31,15 +31,29 @@ Degradation as elsewhere: missing data → "geen data"; chart unavailable → pa
 without the image; pipeline problems listed on the page. No prose on the page
 (no `codex` on CI runners; deterministic output only).
 
-## Workflow
+## Hosting: Dokploy (nixpacks)
 
-`.github/workflows/pages.yml`: cron `30 4 * * *` UTC (≈ 06:30 NL in summer) +
-`workflow_dispatch`. Steps: checkout → setup uv → `uv sync --extra image` →
-`surfwa web` with `TZ=Europe/Amsterdam` (pipeline uses naive local time; runner
-is UTC) → `actions/upload-pages-artifact` → `actions/deploy-pages`. No secrets:
-all data sources are keyless. A failed run leaves the previous deploy live.
+Deployed as a Dokploy Application built with **nixpacks** from the GitHub repo.
+Repo files:
 
-One-time repo setting: Pages → Source: GitHub Actions.
+- `.python-version` → `3.12` (nixpacks' Python provider defaults to 3.11;
+  surfwa requires ≥3.12).
+- `nixpacks.toml` — overrides the provider's default `uv sync --no-dev --frozen`
+  (which would skip the `image` extra and thus matplotlib) by mirroring it
+  with `--extra image` appended; sets a POSIX `TZ` rule for CET/CEST — the
+  runtime image has no tzdata, so a named zone would silently fall back to
+  UTC and shift all times by 2 h; start command `sh deploy/start.sh`.
+- `deploy/start.sh` — generates the site on boot, regenerates every
+  `REFRESH_HOURS` (default 6; Open-Meteo updates several times a day), and
+  serves the site directory with `python -m http.server` on `$PORT`
+  (default 8080). A failed regeneration logs and keeps the previous page.
+
+Dokploy setup (manual, once): Application → GitHub repo → nixpacks build →
+expose port 8080 → attach domain. Verified locally first via
+`nixpacks build` + `docker run` + `curl`.
+
+The earlier GitHub Pages workflow is removed and Pages disabled; Dokploy is the
+single host.
 
 ## Testing
 

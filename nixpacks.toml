@@ -1,0 +1,17 @@
+# Dokploy builds this repo with nixpacks. The Python provider's default
+# install is `uv sync --no-dev --frozen`, which skips the `image` extra —
+# the chart needs matplotlib, so override the install command.
+
+# POSIX TZ rule for Amsterdam (CET/CEST incl. DST switch) — the runtime
+# image has no tzdata files, so a named zone like Europe/Amsterdam is
+# silently ignored and everything would run in UTC.
+[variables]
+TZ = "CET-1CEST,M3.5.0,M10.5.0/3"
+
+# Mirrors the provider's default install command (venv + uv bootstrap),
+# adding --extra image at the end.
+[phases.install]
+cmds = ["python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install uv==$NIXPACKS_UV_VERSION && uv sync --no-dev --frozen --extra image"]
+
+[start]
+cmd = "sh deploy/start.sh"
