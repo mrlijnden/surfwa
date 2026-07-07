@@ -138,32 +138,6 @@ Backtesting is currently a human-assisted comparison. The next improvement shoul
 
 That matters because surfwa currently tends to be exhaustive: if a spot crosses threshold, it lists it. Good forecasting is more editorial: rank the best options, suppress noise, and call out local judgement.
 
-## Webcams
-
-Webcam screenshots can help, but they solve a different problem.
-
-Useful now:
-
-- sanity-checking the current forecast
-- confirming whether a predicted window is actually clean or messy
-- checking shorebreak/current/line quality that buoy and wind data do not capture
-- providing examples for future visual analysis
-
-Not useful by themselves for historical backtests:
-
-- live webcams show the present, not what the beach looked like on a past reference day
-- many webcam images are copyrighted or have usage restrictions
-- without saved snapshots, there is no historical visual truth set
-
-Best future path:
-
-1. Add a `surfwa snapshot` command that saves current structured forecast plus allowed webcam screenshots.
-2. Store snapshots with timestamp, spot, source URL, and forecast window.
-3. Later, compare forecast calls against the saved image: flat, messy, clean lines, shorebreak, crowd/kiters.
-4. Use screenshots as an extra validation signal, not as the primary forecast source.
-
-So yes: webcam screenshots are interesting, especially for current-wave nowcasting and visual QA. They should be saved intentionally from now onward if we want them to improve the model.
-
 ## Project Layout
 
 ```text
