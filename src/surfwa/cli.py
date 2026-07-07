@@ -29,6 +29,10 @@ def main() -> None:
         help="schrijf ook een forecast-grafiek PNG",
     )
 
+    web = subcommands.add_parser("web", help="genereer statische dagpagina")
+    web.add_argument("--days", type=int, default=3)
+    web.add_argument("--out", default="site", metavar="DIR")
+
     backtest = subcommands.add_parser("backtest", help="replay a historical date")
     backtest.add_argument("--date", required=True, help="YYYY-MM-DD")
     backtest.add_argument("--update", default=None, help="reference file to compare against")
@@ -77,6 +81,13 @@ def main() -> None:
                 print(f"Grafiek: {written}")
             except ChartUnavailableError as exc:
                 print(f"Geen grafiek: {exc}")
+        return
+
+    if args.cmd == "web":
+        from surfwa.render.web import build_site
+
+        index = build_site(spots, days=args.days, out_dir=Path(args.out))
+        print(f"Pagina: {index}")
         return
 
     if args.cmd == "backtest":

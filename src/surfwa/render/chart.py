@@ -23,6 +23,10 @@ class ChartUnavailableError(RuntimeError):
     pass
 
 
+def stars(peak_score: float) -> str:
+    return "★" * max(1, min(5, round(peak_score / 2)))
+
+
 @dataclass(frozen=True)
 class DayData:
     day: date
@@ -248,12 +252,11 @@ def _window_panel(ax, day: DayData, spots: dict[str, SpotConfig]) -> None:
     for row, window in enumerate(reversed(day.windows)):
         start = _hour_of(window.start)
         end = 24.0 if window.end.date() > day.day else _hour_of(window.end)
-        stars = "★" * max(1, min(5, round(window.peak_score / 2)))
         spot = spots[window.spot_slug]
         ax.broken_barh([(start, end - start)], (row + 0.15, 0.7), color="#4a90c4")
         label = (
-            f"{spot.name}  {window.start.hour}-{window.end.hour}u  {stars}"
-            f"  [{window.board}]"
+            f"{spot.name}  {window.start.hour}-{window.end.hour}u"
+            f"  {stars(window.peak_score)}  [{window.board}]"
         )
         if window.warnings:
             label += f"  ! {window.warnings[0]}"

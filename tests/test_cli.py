@@ -59,6 +59,19 @@ def test_update_image_default_filename(capsys):
     assert out == Path(f"surfwa-{date.today().isoformat()}.png")
 
 
+def test_web_subcommand_calls_build_site(tmp_path, capsys):
+    out = tmp_path / "site" / "index.html"
+    with (
+        patch("sys.argv", ["surfwa", "web", "--days", "2", "--out", str(tmp_path / "site")]),
+        patch("surfwa.render.web.build_site", return_value=out) as build,
+    ):
+        main()
+
+    assert build.call_args.kwargs["days"] == 2
+    assert build.call_args.kwargs["out_dir"] == tmp_path / "site"
+    assert str(out) in capsys.readouterr().out
+
+
 def test_update_image_degrades_when_matplotlib_missing(capsys):
     def unavailable(days, spots, out):
         raise ChartUnavailableError("matplotlib ontbreekt; uv sync --extra image")

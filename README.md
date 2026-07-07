@@ -87,6 +87,15 @@ uv run surfwa update --days 2 --no-llm --image
 uv run surfwa update --image pad/naar/grafiek.png
 ```
 
+Static daily page (digest + chart, written to `site/index.html`):
+
+```bash
+uv run surfwa web --days 3 --out site
+```
+
+A scheduled GitHub Action (`.github/workflows/pages.yml`) runs this every
+morning and publishes the result to GitHub Pages.
+
 Historical backtest:
 
 ```bash
