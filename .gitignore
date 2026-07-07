@@ -5,6 +5,7 @@ knowledge/private/
 # Python / uv
 __pycache__/
 *.pyc
+*.egg-info/
 .venv/
 dist/
 

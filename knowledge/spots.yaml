@@ -1,0 +1,244 @@
+# surfwa spot knowledge base - hand-maintained local spot rules.
+# coast_normal_deg: compass direction the beach faces (land -> sea).
+# tide_pref: any | high | mid | low | rising | falling | not_low
+# swell_sector: [min_deg, max_deg] waves outside it are blocked/reduced (optional)
+
+maasvlakte:
+  name: Maasvlakte (P3-P6)
+  region: ZH
+  lat: 51.945
+  lon: 4.005
+  tide_station: hoekvanholland
+  wave_buoy: europlatform.3
+  coast_normal_deg: 305
+  tide_pref: not_low
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  notes:
+    - "P3-P5 kleiner maar cleaner en eerder op tij; P6 later beter"
+    - "Eerste push met de wind vaak al goed, cleanst daarna"
+  warnings:
+    - "Avond vaak niet de moeite ivm stroming"
+
+hoek-van-holland:
+  name: Hoek van Holland
+  region: ZH
+  lat: 51.984
+  lon: 4.108
+  tide_station: hoekvanholland
+  wave_buoy: europlatform.3
+  coast_normal_deg: 320
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  notes:
+    - "Fish golven; na 18u vaak beter dan Mvlakte"
+    - "Kan wilde zee aan, ook zonder glassy nog ok"
+  warnings: []
+
+ter-heijde:
+  name: Ter Heijde / Kijkduin / Monster
+  region: ZH
+  lat: 52.038
+  lon: 4.166
+  tide_station: hoekvanholland
+  wave_buoy: europlatform.3
+  coast_normal_deg: 315
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  notes:
+    - "Late avond vaak ultra clean met de wegvallende wind"
+  warnings:
+    - "Beetje stroming bij cleane avondsessies"
+
+scheveningen:
+  name: Scheveningen
+  region: ZH
+  lat: 52.108
+  lon: 4.266
+  tide_station: scheveningen
+  wave_buoy: europlatform.3
+  coast_normal_deg: 315
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  notes:
+    - "Laagtij breekt achterin (ver uit); push naar hoog vaak beste"
+    - "Vaak hele dag doable waar buurspots dat niet zijn"
+    - "Windscheiding ligt regelmatig rond Kijkduin/Schev"
+  warnings:
+    - "Noord-spot: stroming brengt je snel de zee op"
+
+wassenaar:
+  name: Wassenaar
+  region: ZH
+  lat: 52.147
+  lon: 4.331
+  tide_station: scheveningen
+  wave_buoy: europlatform.3
+  coast_normal_deg: 315
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 5.0
+  notes:
+    - "Avond 19-2030u vaak het mooist clean"
+  warnings: []
+
+katwijk:
+  name: Katwijk
+  region: ZH
+  lat: 52.205
+  lon: 4.390
+  tide_station: scheveningen
+  wave_buoy: europlatform.3
+  coast_normal_deg: 310
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 5.0
+  notes:
+    - "Mid-tij vroeg en achterste banken met laag clean"
+  warnings: []
+
+noordwijk:
+  name: Noordwijk
+  region: ZH
+  lat: 52.243
+  lon: 4.424
+  tide_station: scheveningen
+  wave_buoy: europlatform.3
+  coast_normal_deg: 310
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 5.0
+  notes:
+    - "Bij maat veel peddelen om door te raken; dun pak aan"
+    - "Kan compleet windstil zijn terwijl Z-H zuid 5bft heeft"
+  warnings: []
+
+zandvoort:
+  name: Zandvoort
+  region: NH
+  lat: 52.372
+  lon: 4.527
+  tide_station: ijmuiden.buitenhaven
+  wave_buoy: ijmuiden.munitiestort.2
+  coast_normal_deg: 295
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 5.0
+  notes:
+    - "Open spot: snel hotseklots bij 1,5m/9s; avond met minder wind mooier"
+    - "Achterste banken clean met laag; hoogst van Z-H-noord bij W/WNW"
+  warnings: []
+
+ijmuiden:
+  name: IJmuiden
+  region: NH
+  lat: 52.458
+  lon: 4.540
+  tide_station: ijmuiden.buitenhaven
+  wave_buoy: ijmuiden.munitiestort.2
+  coast_normal_deg: 300
+  tide_pref: falling
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  swell_sector: [240, 325]
+  notes:
+    - "W/WNW swell hoeft de pier niet om: werkt als elders rommel is"
+    - "Afgaand tij trekt het cleaner, niet hoger"
+    - "Beste na 19u: meer ruimte en afnemende wind"
+  warnings:
+    - "Veel wind = kiters op het water"
+
+wijk-aan-zee:
+  name: Wijk aan Zee
+  region: NH
+  lat: 52.494
+  lon: 4.578
+  tide_station: ijmuiden.buitenhaven
+  wave_buoy: ijmuiden.munitiestort.2
+  coast_normal_deg: 290
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  notes:
+    - "Ochtend met hoogwater of late avond cleanst; laag ook mooi clean"
+    - "Open spot: wordt snel hotseklots"
+  warnings:
+    - "Dikke shorebreak bakken bij onshore chop"
+
+castricum:
+  name: Castricum (+ Wijk Dorp)
+  region: NH
+  lat: 52.553
+  lon: 4.598
+  tide_station: ijmuiden.buitenhaven
+  wave_buoy: ijmuiden.munitiestort.2
+  coast_normal_deg: 285
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 5.0
+  notes:
+    - "Cleant iets eerder uit dan Wijk"
+  warnings: []
+
+egmond:
+  name: Egmond aan Zee
+  region: NH
+  lat: 52.620
+  lon: 4.617
+  tide_station: denhelder.veersteiger
+  wave_buoy: ijmuiden.munitiestort.2
+  coast_normal_deg: 285
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  notes:
+    - "Shorebreak bakkies vaak 18-20u beter dan later"
+  warnings: []
+
+bergen:
+  name: Bergen aan Zee
+  region: NH
+  lat: 52.673
+  lon: 4.629
+  tide_station: denhelder.veersteiger
+  wave_buoy: ijmuiden.munitiestort.2
+  coast_normal_deg: 285
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  notes:
+    - "Open spot: lang hotseklots bij grote swell, avond mooier"
+  warnings: []
+
+camperduin:
+  name: Camperduin
+  region: NH
+  lat: 52.727
+  lon: 4.638
+  tide_station: denhelder.veersteiger
+  wave_buoy: ijmuiden.munitiestort.2
+  coast_normal_deg: 285
+  tide_pref: any
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  notes:
+    - "Kan eerder op de avond dan de spots zuidelijker"
+  warnings: []
+
+petten:
+  name: Petten (tot Juliana)
+  region: NH
+  lat: 52.770
+  lon: 4.653
+  tide_station: denhelder.veersteiger
+  wave_buoy: ijmuiden.munitiestort.2
+  coast_normal_deg: 290
+  tide_pref: not_low
+  min_wave_m: 0.4
+  min_period_s: 4.5
+  notes:
+    - "Laagwater ok maar wat kleiner"
+  warnings: []
