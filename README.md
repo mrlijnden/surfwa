@@ -12,6 +12,7 @@ Personal surf forecast CLI for the Dutch coast.
 - Scores surf windows for Zuid-Holland and Noord-Holland spots.
 - Applies live buoy nowcast correction when available.
 - Renders either a structured table or a Dutch prose update through `codex exec`.
+- Optionally renders a forecast chart PNG: wave height, wind arrows, tide curve, and surf window bars per day.
 - Replays historical dates against local reference files for backtesting.
 
 ## Method
@@ -77,6 +78,13 @@ One spot only:
 
 ```bash
 uv run surfwa update --days 2 --no-llm --spot ijmuiden
+```
+
+Forecast chart PNG (requires the `image` extra: `uv sync --extra image`; defaults to `surfwa-YYYY-MM-DD.png`):
+
+```bash
+uv run surfwa update --days 2 --no-llm --image
+uv run surfwa update --image pad/naar/grafiek.png
 ```
 
 Historical backtest:

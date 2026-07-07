@@ -1,12 +1,25 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 
-from surfwa.fetch.openmeteo import fetch_hourly
-from surfwa.fetch.rws import fetch_tide_curve, latest_buoy_hm0, tide_extremes
+from surfwa.fetch.openmeteo import HourlyConditions, fetch_hourly
+from surfwa.fetch.rws import TideEvent, fetch_tide_curve, latest_buoy_hm0, tide_extremes
 from surfwa.nowcast import apply_correction, correction_ratio
 from surfwa.score import Window, find_windows, score_hours
 from surfwa.spots import SpotConfig
+
+
+@dataclass
+class PipelineCapture:
+    """Raw series the pipeline retains for chart rendering."""
+
+    hours_by_spot: dict[str, list[HourlyConditions]] = field(default_factory=dict)
+    tide_curve_by_station: dict[str, list[tuple[datetime, int]]] = field(
+        default_factory=dict
+    )
+    extremes_by_station: dict[str, list[TideEvent]] = field(default_factory=dict)
+    buoy_readings: dict[str, tuple[datetime, float]] = field(default_factory=dict)
 
 
 def run_pipeline(
@@ -16,6 +29,7 @@ def run_pipeline(
     end_date: str | None = None,
     spot_filter: str | None = None,
     use_nowcast: bool = True,
+    capture: PipelineCapture | None = None,
 ) -> tuple[list[Window], list[str]]:
     windows: list[Window] = []
     problems: list[str] = []
@@ -60,6 +74,11 @@ def run_pipeline(
                 current = min(hours, key=lambda h: abs(h.time - now))
                 ratio = correction_ratio(reading[1], current.wave_height_m)
                 hours = apply_correction(hours, ratio, date.today())
+                if capture is not None:
+                    capture.buoy_readings[spot.wave_buoy] = reading
+
+        if capture is not None:
+            capture.hours_by_spot[slug] = hours
 
         if spot.tide_station not in tide_cache:
             try:
@@ -67,6 +86,11 @@ def run_pipeline(
                 if not curve:
                     problems.append(f"{slug}: getijdata leeg")
                 tide_cache[spot.tide_station] = tide_extremes(curve)
+                if capture is not None:
+                    capture.tide_curve_by_station[spot.tide_station] = curve
+                    capture.extremes_by_station[spot.tide_station] = tide_cache[
+                        spot.tide_station
+                    ]
             except Exception as exc:
                 problems.append(f"{slug}: getijdata niet beschikbaar ({exc})")
                 tide_cache[spot.tide_station] = []

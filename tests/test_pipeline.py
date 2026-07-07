@@ -92,6 +92,25 @@ def test_pipeline_reports_empty_tide_data_but_keeps_windows(*_):
     assert "getijdata leeg" in problems[0]
 
 
+@patch(
+    "surfwa.pipeline.latest_buoy_hm0",
+    return_value=(datetime(2026, 7, 6, 11, 50), 1.1),
+)
+@patch("surfwa.pipeline.tide_extremes", return_value=[])
+@patch("surfwa.pipeline.fetch_tide_curve", return_value=[(datetime(2026, 7, 6, 0), 0)])
+@patch("surfwa.pipeline.fetch_hourly", side_effect=_good_hours)
+def test_pipeline_fills_capture_when_given(*_):
+    from surfwa.pipeline import PipelineCapture, run_pipeline
+
+    capture = PipelineCapture()
+    windows, problems = run_pipeline(SPOTS, days=1, capture=capture)
+
+    assert len(capture.hours_by_spot["testspot"]) == 4
+    assert capture.tide_curve_by_station["x"] == [(datetime(2026, 7, 6, 0), 0)]
+    assert capture.extremes_by_station["x"] == []
+    assert capture.buoy_readings["y"] == (datetime(2026, 7, 6, 11, 50), 1.1)
+
+
 def test_render_contains_spot_and_times():
     from surfwa.pipeline import run_pipeline
     from surfwa.render.structured import render_windows, windows_to_json
