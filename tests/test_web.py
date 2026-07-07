@@ -67,6 +67,61 @@ def test_digest_keeps_top3_per_day_one_per_spot():
     assert [w.spot_slug for w in result[1][1]] == ["bspot"]
 
 
+def test_digest_appends_favorites_best_window_below_top3():
+    from surfwa.render.web import digest
+
+    windows = [
+        _window("aspot", DAY1, 18, 23, 7.5),
+        _window("bspot", DAY1, 12, 14, 5.0),
+        _window("cspot", DAY1, 1, 3, 4.5),
+        _window("dspot", DAY1, 21, 23, 4.2),
+        _window("dspot", DAY1, 2, 3, 3.1),
+        _window("bspot", DAY2, 9, 12, 6.2),
+    ]
+
+    result = digest(windows, favorites={"dspot"})
+
+    day1 = result[0][1]
+    assert [w.spot_slug for w in day1] == ["aspot", "bspot", "cspot", "dspot"]
+    assert day1[3].peak_score == 4.2
+    # dspot has no window on DAY2: stays silent
+    assert [w.spot_slug for w in result[1][1]] == ["bspot"]
+
+
+def test_digest_does_not_duplicate_favorite_already_in_top3():
+    from surfwa.render.web import digest
+
+    windows = [
+        _window("dspot", DAY1, 18, 23, 7.5),
+        _window("bspot", DAY1, 12, 14, 5.0),
+    ]
+
+    result = digest(windows, favorites={"dspot"})
+
+    assert [w.spot_slug for w in result[0][1]] == ["dspot", "bspot"]
+
+
+def test_render_html_marks_favorite_rows():
+    from surfwa.render.web import digest, render_html
+
+    spots = dict(SPOTS)
+    spots["dspot"] = SPOTS["dspot"].__class__(
+        **{**SPOTS["dspot"].__dict__, "favorite": True}
+    )
+    windows = [_window("dspot", DAY1, 21, 23, 4.2)]
+
+    html = render_html(
+        digest(windows, favorites={"dspot"}),
+        spots,
+        live=None,
+        problems=[],
+        generated=datetime(2026, 7, 7, 6, 30),
+        chart_file=None,
+    )
+
+    assert "Dspot ♥" in html
+
+
 def test_render_html_shows_digest_live_wind_and_chart():
     from surfwa.render.web import digest, render_html
 

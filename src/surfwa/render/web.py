@@ -63,7 +63,9 @@ footer { color: var(--muted); font-size: 0.82rem; }
 
 
 def digest(
-    windows: list[Window], per_day: int = 3
+    windows: list[Window],
+    per_day: int = 3,
+    favorites: set[str] = frozenset(),
 ) -> list[tuple[date, list[Window]]]:
     by_day: dict[date, list[Window]] = {}
     for window in windows:
@@ -71,15 +73,20 @@ def digest(
 
     result: list[tuple[date, list[Window]]] = []
     for day in sorted(by_day):
+        ranked = sorted(by_day[day], key=lambda w: -w.peak_score)
         picked: list[Window] = []
         seen: set[str] = set()
-        for window in sorted(by_day[day], key=lambda w: -w.peak_score):
+        for window in ranked:
             if window.spot_slug in seen:
                 continue
             picked.append(window)
             seen.add(window.spot_slug)
             if len(picked) == per_day:
                 break
+        for slug in sorted(favorites - seen):
+            best = next((w for w in ranked if w.spot_slug == slug), None)
+            if best:
+                picked.append(best)
         result.append((day, picked))
     return result
 
@@ -167,9 +174,17 @@ def build_site(
     except ChartUnavailableError as exc:
         problems.append(f"geen grafiek: {exc}")
 
+    favorites = {slug for slug, spot in spots.items() if spot.favorite}
     index = out_dir / "index.html"
     index.write_text(
-        render_html(digest(windows), spots, live, problems, datetime.now(), chart_file),
+        render_html(
+            digest(windows, favorites=favorites),
+            spots,
+            live,
+            problems,
+            datetime.now(),
+            chart_file,
+        ),
         encoding="utf-8",
     )
     return index
@@ -185,7 +200,7 @@ def _day_section(day: date, windows: list[Window], spots: dict[str, SpotConfig])
         rows.append(
             '<div class="row">'
             f'<span class="when">{w.start.hour}-{w.end.hour}u</span>'
-            f'<span class="what">{escape(spot.name)} {stars(w.peak_score)}'
+            f'<span class="what">{escape(spot.name)}{" ♥" if spot.favorite else ""} {stars(w.peak_score)}'
             f"<small>{detail}</small></span>"
             "</div>"
         )

@@ -22,6 +22,7 @@ class SpotConfig:
     min_wave_m: float
     min_period_s: float
     swell_sector: tuple[int, int] | None = None
+    favorite: bool = False
     notes: list[str] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
@@ -46,6 +47,7 @@ def load_spots(path: Path) -> dict[str, SpotConfig]:
             min_wave_m=float(d["min_wave_m"]),
             min_period_s=float(d["min_period_s"]),
             swell_sector=tuple(sector) if sector else None,
+            favorite=bool(d.get("favorite", False)),
             notes=list(d.get("notes", [])),
             warnings=list(d.get("warnings", [])),
         )

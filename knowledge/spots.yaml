@@ -154,6 +154,7 @@ ijmuiden:
 wijk-aan-zee:
   name: Wijk aan Zee
   region: NH
+  favorite: true
   lat: 52.494
   lon: 4.578
   tide_station: ijmuiden.buitenhaven

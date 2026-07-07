@@ -16,6 +16,12 @@ def test_loads_all_spots():
     assert spots["scheveningen"].warnings
 
 
+def test_loads_favorite_flag():
+    spots = load_spots(SPOTS)
+    assert spots["wijk-aan-zee"].favorite is True
+    assert spots["ijmuiden"].favorite is False
+
+
 def test_rejects_bad_tide_pref(tmp_path):
     bad = tmp_path / "bad.yaml"
     bad.write_text(
