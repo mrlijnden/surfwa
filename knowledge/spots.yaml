@@ -133,7 +133,7 @@ zandvoort:
   warnings: []
 
 ijmuiden:
-  name: IJmuiden
+  name: IJmuiden (Noorderpier)
   region: NH
   lat: 52.458
   lon: 4.540
@@ -145,6 +145,7 @@ ijmuiden:
   min_period_s: 4.5
   swell_sector: [240, 325]
   notes:
+    - "Noorderpier bij de havenmond, grenst aan Wijk aan Zee"
     - "W/WNW swell hoeft de pier niet om: werkt als elders rommel is"
     - "Afgaand tij trekt het cleaner, niet hoger"
     - "Beste na 19u: meer ruimte en afnemende wind"
