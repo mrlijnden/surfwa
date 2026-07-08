@@ -1,5 +1,7 @@
 # surfwa
 
+![surfwa banner](docs/images/banner.png)
+
 Personal surf forecast CLI for the Dutch coast.
 
 `surfwa` turns wave, wind, tide, live wind, and a hand-maintained spot rule base into a short surf update. It is built for quick personal decisions: where is worth checking, when is the window, what board makes sense, and what local warnings matter.
@@ -93,9 +95,13 @@ Static daily page (digest + chart, written to `site/index.html`):
 uv run surfwa web --days 3 --out site
 ```
 
-For hosting, the repo builds with nixpacks (see `nixpacks.toml`, e.g. on
-Dokploy): `deploy/start.sh` generates the page on boot, refreshes it every
-`REFRESH_HOURS` (default 6), and serves it on `PORT` (default 8080).
+To self-host the page, regenerate it on a schedule (cron, systemd timer,
+etc.) and serve the output directory with any static file server:
+
+```bash
+uv run surfwa web --days 3 --out site
+python -m http.server 8080 -d site
+```
 
 Historical backtest:
 
